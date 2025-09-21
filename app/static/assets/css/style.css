@@ -5,3 +5,20 @@
     border-collapse:separate;
     border-spacing: 20px;
 }
+
+.div_como_botao{
+    display:inline-block;
+    color:#444;
+    border:1px solid #CCC;
+    background:#DDD;
+    box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+    cursor:pointer;
+    vertical-align:middle;
+    max-width: 100px;
+    padding: 5px;
+    text-align: center;
+}
+.div_como_botao:active {
+    box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
+    transform: scale(80%)
+}
