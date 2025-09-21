@@ -31,9 +31,17 @@
 {% block content %}
   
   <div class="content-wrapper">
-
     <!-- Content Header (Page header) -->
     <div class="content-header">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -80,11 +88,13 @@
                 <td>{{ operacao.preco_unitario }}</td>
                 <td>{{ operacao.custos }}</td>
                 <td>{{ operacao.valor_total }}</td>
-                <td>
-                  <a href="{{ url_for('operacoes.mostrar_operacao', operacao_id=operacao.id) }}">
-                  Detalhes</a> | 
-                  <a href="{{ url_for('operacoes.editar_operacao', operacao_id=operacao.id) }}">
-                  Editar</a>
+                <td align="center">
+                  <a class="rounded btn btn-sm bg-success" href="{{ url_for('operacoes.mostrar_operacao', operacao_id=operacao.id) }}">Detalhes</a>
+                  <a class="rounded btn btn-sm bg-info" href="{{ url_for('operacoes.editar_operacao', operacao_id=operacao.id) }}">Editar</a>
+                  <form method="POST" action="{{ url_for('operacoes.deletar_operacao', operacao_id=operacao.id) }}" style="display:inline;">
+                    <button class="rounded btn btn-sm bg-danger" type="submit" onclick="return confirm('Tem certeza que deseja excluir esta operação?');">Deletar</button>
+                  </form>
+                  
                 </td>
               </tr>
               {% else %}
