@@ -66,23 +66,28 @@
                   <th>Preço Unitário</th>
                   <th>Custos</th>
                   <th>Valor Total</th>
+                  <th></th>
               </tr>
           </thead>
           <tbody>
               {% for operacao in operacoes %}
               <tr>
-                  <td>{{ operacao.data.strftime('%d/%m/%Y') }}</td>
-                  <td>{{ operacao.ativo.ticker }}</td>
-                  <td>{{ operacao.tipo.nome }}</td>
-                  <td>{{ operacao.carteira.nome }}</td>
-                  <td>{{ operacao.quantidade }}</td>
-                  <td>{{ operacao.preco_unitario }}</td>
-                  <td>{{ operacao.custos }}</td>
-                  <td>{{ operacao.valor_total }}</td>
+                <td>{{ operacao.data.strftime('%d/%m/%Y') }}</td>
+                <td>{{ operacao.ativo.ticker }}</td>
+                <td>{{ operacao.tipo.nome }}</td>
+                <td>{{ operacao.carteira.nome }}</td>
+                <td>{{ operacao.quantidade }}</td>
+                <td>{{ operacao.preco_unitario }}</td>
+                <td>{{ operacao.custos }}</td>
+                <td>{{ operacao.valor_total }}</td>
+                <td>
+                  <a href="{{ url_for('operacoes.mostrar_operacao', operacao_id=operacao.id) }}">
+                  Detalhes</a>
+                </td>
               </tr>
               {% else %}
               <tr>
-                  <td colspan="8">Nenhuma operação cadastrada.</td>
+                  <td colspan="9">Nenhuma operação cadastrada.</td>
               </tr>
               {% endfor %}
           </tbody>
