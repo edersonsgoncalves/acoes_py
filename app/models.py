@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from decimal import Decimal
-from typing import Optional
+
+# from typing import Optional
 
 db = SQLAlchemy()
 
@@ -76,30 +77,42 @@ class Operacao(db.Model):
     carteira = db.relationship("Carteira", back_populates="operacoes")
     status_operacao = db.relationship("StatusOperacao", back_populates="operacoes")
 
-    def __init__(
-        self,
-        data: date,
-        tipo,
-        ativo,
-        carteira,
-        quantidade,
-        status,
-        preco_unitario: Optional[Decimal] = Decimal(0),
-        custos: Optional[Decimal] = Decimal(0),
-    ):
-        self.data = data
-        self.tipo = tipo
-        self.ativo = ativo
-        self.carteira = carteira
-        self.quantidade = quantidade
-        self.preco_unitario = preco_unitario
-        self.custos = custos
+    @property
+    def valor_total_calculado(self):
+        return (self.quantidade * self.preco_unitario) + self.custos
 
-        # Atribui o objeto status, SQLAlchemy irá extrair o ID
-        self.status_operacao = status
+    # Ou se preferir manter o campo no banco, mas garantir que sempre esteja correto
+    def calcular_valor_total(self):
+        self.valor_total = (self.quantidade * self.preco_unitario) + self.custos
+        return self.valor_total
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # def __init__(
+        #     self,
+        #     data: date,
+        #     tipo,
+        #     ativo,
+        #     carteira,
+        #     quantidade,
+        #     status,
+        #     preco_unitario: Optional[Decimal] = Decimal(0),
+        #     custos: Optional[Decimal] = Decimal(0),
+        # ):
+        #     self.data = data
+        #     self.tipo = tipo
+        #     self.ativo = ativo
+        #     self.carteira = carteira
+        #     self.quantidade = quantidade
+        #     self.preco_unitario = preco_unitario
+        #     self.custos = custos
+
+        #     # Atribui o objeto status, SQLAlchemy irá extrair o ID
+        #     self.status_operacao = status
 
         # Garante que o valor total seja calculado corretamente
-        self.valor_total = (self.quantidade * self.preco_unitario) + self.custos
+        self.calcular_valor_total()
 
     def __str__(self):
         return f"{self.data} | {self.tipo.nome} | {self.ativo.ticker} | {self.carteira.nome} | \
