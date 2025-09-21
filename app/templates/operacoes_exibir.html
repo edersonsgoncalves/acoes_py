@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %} Operações {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/adminlte.min.css') }}">
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+{% endblock stylesheets %}
+
+{% block content %}
+  
+  <div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Operação {{dados.tipo.nome}} - {{dados.ativo.nome}} ({{dados.data.strftime("%d/%m/%Y")}})</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Início</a></li>
+              <li class="breadcrumb-item"><a href="{{ url_for('operacoes.exibir_operacoes') }}">Operações</a></li>
+              <li class="breadcrumb-item active">Operação {{dados.ativo.nome}}</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <table border="0" class="tabela_detalhe_operacao">
+          <tbody>
+            <tr>
+              <td style="width: auto">
+                <label>
+                  Data da Operação
+                </label>
+                <p class="detalhe_operacao">
+                  {{dados.data.strftime('%d/%m/%Y')}}
+                </p>
+              </td>
+              <td>
+                <label>
+                  Carteira
+                </label>
+                <p class="detalhe_operacao">
+                  {{dados.carteira.nome}}
+                </p>
+              </td>
+              <td>
+                <label>
+                  Ticker
+                </label>
+                <p class="detalhe_operacao">
+                  {{dados.ativo.ticker}}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>
+                  Quantidade
+                </label>
+                <p class="detalhe_operacao">
+                  {{dados.quantidade}}
+                </p>
+              </td>
+              <td >
+                <label>
+                  Valor
+                </label>
+                <p class="detalhe_operacao">
+                  R$ {{dados.preco_unitario}}
+                </p>
+              </td>
+              <td>
+                <label>
+                  Custos
+                </label>
+                <p class="detalhe_operacao">
+                  R$ {{dados.custos}}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" style="text-align: center;">
+                <label>Valor Total</label>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" style="text-align: center; font-size: larger; font-weight: bolder;">R$ {{dados.valor_total}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery/jquery.min.js') }}"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <!-- Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <!-- ChartJS -->
+  <script src="{{ url_for('static', filename='assets/plugins/chart.js/Chart.min.js') }}"></script>
+  <!-- Sparkline -->
+  <script src="{{ url_for('static', filename='assets/plugins/sparklines/sparkline.js') }}"></script>
+  <!-- JQVMap -->
+  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+  <!-- jQuery Knob Chart -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+  <!-- daterangepicker -->
+  <script src="{{ url_for('static', filename='assets/plugins/moment/moment.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+  <!-- Summernote -->
+  <script src="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+  <!-- overlayScrollbars -->
+  <script src="{{ url_for('static', filename='assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+  <!-- AdminLTE App -->
+  <script src="{{ url_for('static', filename='assets/js/adminlte.js') }}"></script>
+  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+  <script src="{{ url_for('static', filename='assets/js/pages/dashboard.js') }}"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="{{ url_for('static', filename='assets/js/demo.js') }}"></script>
+
+{% endblock javascripts %}
