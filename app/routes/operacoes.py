@@ -155,3 +155,21 @@ def editar_operacao(operacao_id):
     return render_template(
         "operacoes_editar.html", formulario=form, operacao=operacao_para_editar
     )
+
+
+@bp_operacoes.route("/deletar/<int:operacao_id>", methods=["POST"])
+def deletar_operacao(operacao_id):
+    operacao = db.session.get(Operacao, operacao_id)
+    if not operacao:
+        flash("Operação não encontrada.", "danger")
+        return redirect(url_for("operacoes.exibir_operacoes"))
+
+    try:
+        db.session.delete(operacao)
+        db.session.commit()
+        flash("Operação excluída com sucesso.", "success")
+        return redirect(url_for("operacoes.exibir_operacoes"))
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Não foi possível remover a operação selecionada: {e}", "danger")
+        return redirect(url_for("operacoes.exibir_operacoes"))
