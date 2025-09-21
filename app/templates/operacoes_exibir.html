@@ -20,7 +20,15 @@
 {% block content %}
   
   <div class="content-wrapper">
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                      {{ message }}
+                  </div>
+              {% endfor %}
+          {% endif %}
+      {% endwith %}
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -43,69 +51,96 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <table border="0" class="tabela_detalhe_operacao">
-          <tbody>
-            <tr>
-              <td style="width: auto">
-                <label>
-                  Data da Operação
-                </label>
-                <p class="detalhe_operacao">
-                  {{dados.data.strftime('%d/%m/%Y')}}
-                </p>
-              </td>
-              <td>
-                <label>
-                  Carteira
-                </label>
-                <p class="detalhe_operacao">
-                  {{dados.carteira.nome}}
-                </p>
-              </td>
-              <td>
-                <label>
-                  Ticker
-                </label>
-                <p class="detalhe_operacao">
-                  {{dados.ativo.ticker}}
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label>
-                  Quantidade
-                </label>
-                <p class="detalhe_operacao">
-                  {{dados.quantidade}}
-                </p>
-              </td>
-              <td >
-                <label>
-                  Valor
-                </label>
-                <p class="detalhe_operacao">
-                  R$ {{dados.preco_unitario}}
-                </p>
-              </td>
-              <td>
-                <label>
-                  Custos
-                </label>
-                <p class="detalhe_operacao">
-                  R$ {{dados.custos}}
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3" style="text-align: center;">
-                <label>Valor Total</label>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3" style="text-align: center; font-size: larger; font-weight: bolder;">R$ {{dados.valor_total}}</td>
-            </tr>
-          </tbody>
+        <table border="0" style="width: 100%;">
+          <tr>
+            <td>
+              <table border="0" class="tabela_detalhe_operacao">
+                <tbody>
+                  <tr>
+                    <td style="width: auto">
+                      <label>
+                        Data da Operação
+                      </label>
+                      <p class="detalhe_operacao">
+                        {{dados.data.strftime('%d/%m/%Y')}}
+                      </p>
+                    </td>
+                    <td>
+                      <label>
+                        Carteira
+                      </label>
+                      <p class="detalhe_operacao">
+                        {{dados.carteira.nome}}
+                      </p>
+                    </td>
+                    <td>
+                      <label>
+                        Ticker
+                      </label>
+                      <p class="detalhe_operacao">
+                        {{dados.ativo.ticker}}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>
+                        Quantidade
+                      </label>
+                      <p class="detalhe_operacao">
+                        {{dados.quantidade}}
+                      </p>
+                    </td>
+                    <td >
+                      <label>
+                        Valor
+                      </label>
+                      <p class="detalhe_operacao">
+                        R$ {{dados.preco_unitario}}
+                      </p>
+                    </td>
+                    <td>
+                      <label>
+                        Custos
+                      </label>
+                      <p class="detalhe_operacao">
+                        R$ {{dados.custos}}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="text-align: center;">
+                      <label>Valor Total</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="text-align: center; font-size: larger; font-weight: bolder;">R$ {{dados.valor_total}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td>
+              <table border="0" class="tabela_detalhe_operacao">
+                <tbody>
+                  <tr>
+                    <td colspan="4" align="center"><label>Funções</label></td>
+                  </tr>
+                  <tr>
+                    <td>
+                        <div class="div_como_botao card bg-success"><a href="{{ url_for('operacoes.exibir_operacoes') }}">Voltar</a></div>
+                    </td>
+                    <td>
+                        <div class="div_como_botao card bg-info"><a href="{{ url_for('operacoes.editar_operacao', operacao_id=dados.id) }}">Editar</a></div>
+                    </td>
+                    <td>
+                        <div class="div_como_botao card bg-danger"><a href="#">Deletar</a></div>
+                    </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </td>
+          </tr>
         </table>
       </div><!-- /.container-fluid -->
     </section>
