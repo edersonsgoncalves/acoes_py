@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Operação - X2 Invest</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <h1>Adicionar Nova Operação</h1>
+    <form method="POST" action="{{ url_for('operacoes.adicionar_operacao') }}">
+        {{ formulario.csrf_token }}
+
+        <div>
+            {{ formulario.data_operacao.label }}<br>
+            {{ formulario.data_operacao(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.ativo.label }}<br>
+            {{ formulario.ativo(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.tipo.label }}<br>
+            {{ formulario.tipo(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.carteira.label }}<br>
+            {{ formulario.carteira(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.quantidade.label }}<br>
+            {{ formulario.quantidade(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.preco_unitario.label }}<br>
+            {{ formulario.preco_unitario(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.custos.label }}<br>
+            {{ formulario.custos(class="form-control") }}
+        </div>
+        <div>
+            {{ formulario.submit }}
+        </div>
+    </form>
+    {% for field, errors in formulario.errors.items() %}
+    {% for error in errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+    {% endfor %}
+</body>
+</html>
