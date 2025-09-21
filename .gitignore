@@ -2,3 +2,4 @@ app/.env
 __pycache__/
 app/migrations/
 
+.vscode/settings.json
