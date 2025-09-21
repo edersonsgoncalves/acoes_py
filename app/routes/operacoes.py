@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, flash
+from flask import Blueprint, render_template, url_for, redirect, flash, abort
 from models import db, Operacao, TipoOperacao, Carteira, Ativo, StatusOperacao
 from forms import OperacaoForm
 from datetime import date
@@ -92,3 +92,13 @@ def adicionar_operacao():
     # Se o formulário não for válido ou se a requisição for GET,
     # renderiza o template com o formulário
     return render_template("operacoes_adicionar.html", formulario=formulario)
+
+
+@bp_operacoes.route("/exibir/<int:operacao_id>", methods=["GET"])
+def mostrar_operacao(operacao_id):
+    operacao_especifica = db.session.get(Operacao, operacao_id)
+
+    if not operacao_especifica:
+        abort(404)
+
+    return render_template("operacoes_exibir.html", dados=operacao_especifica)
