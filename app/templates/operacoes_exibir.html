@@ -127,13 +127,15 @@
                   </tr>
                   <tr>
                     <td>
-                        <div class="div_como_botao card bg-success"><a href="{{ url_for('operacoes.exibir_operacoes') }}">Voltar</a></div>
+                      <a class="rounded btn btn-sm bg-success" href="{{ url_for('operacoes.exibir_operacoes') }}">Voltar</a>  
                     </td>
                     <td>
-                        <div class="div_como_botao card bg-info"><a href="{{ url_for('operacoes.editar_operacao', operacao_id=dados.id) }}">Editar</a></div>
+                      <a class="rounded btn btn-sm bg-info" href="{{ url_for('operacoes.editar_operacao', operacao_id=dados.id) }}">Editar</a>  
                     </td>
                     <td>
-                        <div class="div_como_botao card bg-danger"><a href="#">Deletar</a></div>
+                          <form method="POST" action="{{ url_for('operacoes.deletar_operacao', operacao_id=dados.id) }}">
+                              <button class="rounded btn btn-sm bg-danger" type="submit" onclick="return confirm('Tem certeza que deseja excluir esta operação?');">Excluir</button>
+                          </form>
                     </td>
                   </tr>
                   
