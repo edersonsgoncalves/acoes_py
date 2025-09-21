@@ -82,7 +82,9 @@
                 <td>{{ operacao.valor_total }}</td>
                 <td>
                   <a href="{{ url_for('operacoes.mostrar_operacao', operacao_id=operacao.id) }}">
-                  Detalhes</a>
+                  Detalhes</a> | 
+                  <a href="{{ url_for('operacoes.editar_operacao', operacao_id=operacao.id) }}">
+                  Editar</a>
                 </td>
               </tr>
               {% else %}
