@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, flash, abort
+from flask import Blueprint, render_template, url_for, redirect, flash, abort, request
 from models import db, Operacao, TipoOperacao, Carteira, Ativo, StatusOperacao
 from forms import OperacaoForm
 from datetime import date
@@ -75,13 +75,15 @@ def adicionar_operacao():
                 quantidade=formulario.quantidade.data,
                 preco_unitario=formulario.preco_unitario.data,
                 custos=formulario.custos.data,
-                status=status_obj,
+                status_operacao=status_obj,
             )
 
             db.session.add(nova_operacao)
             db.session.commit()
 
-            flash("Operação registrada com sucesso!", "success")
+            mensagem = f'Operação registrada com sucesso! <a href="{url_for('operacoes.exibir_operacoes')}">\
+                Voltar para listagem de ativos</a>'
+            flash(mensagem, "success")
 
             return redirect(url_for("operacoes.adicionar_operacao"))
 
@@ -102,3 +104,54 @@ def mostrar_operacao(operacao_id):
         abort(404)
 
     return render_template("operacoes_exibir.html", dados=operacao_especifica)
+
+
+@bp_operacoes.route("/editar/<int:operacao_id>", methods=["GET", "POST"])
+def editar_operacao(operacao_id):
+    operacao_para_editar = db.session.get(Operacao, operacao_id)
+
+    if not operacao_para_editar:
+        flash("Operação não encontrada.", "danger")
+        return redirect(url_for("operacoes.listar_operacoes"))
+
+    # Primeiro, popula os SelectFields com os dados do banco
+    tipos_operacao = db.session.execute(db.select(TipoOperacao)).scalars().all()
+    carteiras = db.session.execute(db.select(Carteira)).scalars().all()
+    ativos = db.session.execute(db.select(Ativo)).scalars().all()
+
+    # Cria o formulário já com as choices
+    form = OperacaoForm()
+    form.tipo.choices = [(tipo.id, tipo.nome) for tipo in tipos_operacao]
+    form.carteira.choices = [(c.id, c.nome) for c in carteiras]
+    form.ativo.choices = [(a.id, a.ticker) for a in ativos]
+
+    # Agora sim, carrega os dados do objeto do banco
+    if request.method == "GET":
+        form.data_operacao.data = operacao_para_editar.data
+        form.tipo.data = str(
+            operacao_para_editar.tipo_id
+        )  # Converta para string se necessário
+        form.ativo.data = str(operacao_para_editar.ativo_id)
+        form.carteira.data = str(operacao_para_editar.carteira_id)
+        form.quantidade.data = operacao_para_editar.quantidade
+        form.preco_unitario.data = operacao_para_editar.preco_unitario
+        form.custos.data = operacao_para_editar.custos
+
+    if form.validate_on_submit():
+        # Lógica para atualizar a operação
+        operacao_para_editar.data = form.data_operacao.data
+        operacao_para_editar.tipo_id = int(form.tipo.data)
+        operacao_para_editar.ativo_id = int(form.ativo.data)
+        operacao_para_editar.carteira_id = int(form.carteira.data)
+        operacao_para_editar.quantidade = form.quantidade.data
+        operacao_para_editar.preco_unitario = form.preco_unitario.data
+        operacao_para_editar.custos = form.custos.data
+        operacao_para_editar.calcular_valor_total()
+
+        db.session.commit()
+        flash("Operação atualizada com sucesso!", "success")
+        return redirect(url_for("operacoes.editar_operacao", operacao_id=operacao_id))
+
+    return render_template(
+        "operacoes_editar.html", formulario=form, operacao=operacao_para_editar
+    )
