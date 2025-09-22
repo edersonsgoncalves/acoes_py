@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, DateField, SubmitField, SelectField
+from wtforms import DecimalField, DateField, SubmitField, SelectField, StringField
 from wtforms.validators import DataRequired, NumberRange
 from wtforms.widgets import NumberInput
 from decimal import Decimal
@@ -42,3 +42,12 @@ class OperacaoForm(FlaskForm):
 
     # Botão de envio do formulário
     submit = SubmitField("Registrar Operação")
+
+
+class FormularioAtivo(FlaskForm):
+    ativo_ticker = StringField("Ticker do Ativo", validators=[DataRequired()])
+    nome = StringField("Nome do Ativo", validators=[DataRequired()])
+    segmento = StringField("Segmento do Ativo")
+
+    # Botão de envio do formulário
+    submit = SubmitField("Registrar Ativo")
