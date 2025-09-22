@@ -38,6 +38,9 @@ class Ativo(db.Model):
     posicoes_ativos = db.relationship("PosicaoAtivo", back_populates="ativo")
     operacoes = db.relationship("Operacao", back_populates="ativo")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
 class TipoOperacao(db.Model):
     __tablename__ = "tipos_operacoes"
