@@ -66,33 +66,50 @@
         {% endfor %}
 
         <form method="GET" action="{{ url_for('operacoes.exibir_operacoes') }}">
-    <div class="row">
-        <div class="col-md-3">
-            <label for="ticker">Ticker</label>
-            <input type="text" name="ticker" id="ticker" class="form-control" value="{{ filtro_ticker }}">
-        </div>
-        <div class="col-md-2">
-            <label for="data_inicio">Data Início</label>
-            <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ filtro_data_inicio }}">
-        </div>
-        <div class="col-md-2">
-            <label for="data_fim">Data Fim</label>
-            <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ filtro_data_fim }}">
-        </div>
-        <div class="col-md-3">
-            <label for="carteira_id">Carteira</label>
-            <select name="carteira_id" id="carteira_id" class="form-control">
+          <div class="row justify-content-center">
+            <div class="col-md-2">
+              <label for="ticker">Ticker</label>
+              <input type="text" name="ticker" id="ticker" class="form-control" value="{{ filtro_ticker }}">
+            </div>
+            <div class="col-md-2">
+              <label for="tipo_operacao_id">Tipo de Operação</label>
+              <select name="tipo_operacao_id" id="tipo_operacao_id" class="form-control">
+                <option value="">Todas</option>
+                {% for tipo_operacao in operacoes_por_tipo %}
+                  <option value="{{ tipo_operacao.id }}" {% if tipo_operacao.id|string == filtro_tipo_operacao_id %}selected{% endif %}>{{ tipo_operacao.nome }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="data_inicio">Data Início</label>
+              <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ filtro_data_inicio }}">
+            </div>
+            <div class="col-md-2">
+              <label for="data_fim">Data Fim</label>
+              <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ filtro_data_fim }}">
+            </div>
+            <div class="col-md-2">
+              <label for="carteira_id">Carteira</label>
+              <select name="carteira_id" id="carteira_id" class="form-control">
                 <option value="">Todas</option>
                 {% for carteira in carteiras %}
-                    <option value="{{ carteira.id }}" {% if carteira.id|string == filtro_carteira_id %}selected{% endif %}>{{ carteira.nome }}</option>
+                  <option value="{{ carteira.id }}" {% if carteira.id|string == filtro_carteira_id %}selected{% endif %}>{{ carteira.nome }}</option>
                 {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary btn-block">Filtrar</button>
-        </div>
-    </div>
-</form>
+              </select>
+            </div>
+          
+          </div>
+          &nbsp;
+          <div class="row justify-content-center">
+            <div class="col-md-2 d-flex align-items-center">
+              <button type="submit" class="btn btn-primary btn-block">Filtrar</button>
+            </div>
+          </form>
+            <div class="col-md-2 d-flex center">
+              <a href="{{ url_for('operacoes.exibir_operacoes') }}" class="btn btn-warning btn-block">Limpar Filtros</a>
+            </div>
+          </div>
+
       <hr>
       <table border="1" style="width:100%">
           <thead>

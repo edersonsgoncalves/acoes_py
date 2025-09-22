@@ -18,9 +18,14 @@ def exibir_operacoes(page=1):
     filtro_data_inicio = request.args.get("data_inicio", "")
     filtro_data_fim = request.args.get("data_fim", "")
     filtro_carteira_id = request.args.get("carteira_id", "")
+    filtro_tipo_operacao_id = request.args.get("tipo_operacao_id", "")
 
     # Constrói a consulta base
     query = db.select(Operacao)
+
+    # Filtro por Tipo de Operação
+    if filtro_tipo_operacao_id:
+        query = query.filter(Operacao.tipo_id == filtro_tipo_operacao_id)
 
     # Adiciona os filtros à consulta se os valores existirem
     if filtro_ticker:
@@ -46,6 +51,7 @@ def exibir_operacoes(page=1):
 
     # Obtém todas as carteiras para popular o filtro do SelectField
     carteiras = db.session.execute(db.select(Carteira)).scalars().all()
+    tipos_operacoes = db.session.execute(db.select(TipoOperacao)).scalars().all()
 
     return render_template(
         "operacoes_listar.html",
@@ -56,18 +62,10 @@ def exibir_operacoes(page=1):
         filtro_data_inicio=filtro_data_inicio,
         filtro_data_fim=filtro_data_fim,
         filtro_carteira_id=filtro_carteira_id,
-        carteiras=carteiras,  # Passa a lista de carteiras para o select
+        carteiras=carteiras,
+        filtro_tipo_operacao_id=filtro_tipo_operacao_id,
+        operacoes_por_tipo=tipos_operacoes,  # Passa a lista de operações de acordo com o tipo selecionado para o select
     )
-
-    # operacoes_paginadas = db.paginate(
-    #     db.select(Operacao).order_by(Operacao.data.desc()), page=page, per_page=PER_PAGE
-    # )
-
-    # return render_template(
-    #     "operacoes_listar.html",
-    #     operacoes=operacoes_paginadas.items,
-    #     paginacao=operacoes_paginadas,
-    # )
 
 
 @bp_operacoes.route("/adicionar", methods=["GET", "POST"])
