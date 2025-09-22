@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %} Ativos {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/adminlte.min.css') }}">
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="content-wrapper">
+  
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                  {% for category, message in messages %}
+                      <div class="alert alert-{{ category }}">
+                          {{ message | safe }}
+                      </div>
+                  {% endfor %}
+              {% endif %}
+          {% endwith %}
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Adicionar Nova Operação</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Início</a></li>
+              <li class="breadcrumb-item active">Ativos</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="col-sm-6 col-lg-6 col-xs-12">
+          <form method="POST" action="{{ url_for('ativos.adicionar_ativo') }}">
+          {{ formulario.csrf_token }}
+            
+          <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="ativo_ticker">{{ formulario.ativo_ticker.label }}</label>
+                  <div class="input-group">
+                      {{ formulario.ativo_ticker(class="form-control") }}
+                      <div class="input-group-append">
+                          <a href="#" id="consultar-btn" class="btn btn-outline-secondary">Consultar</a>
+                      </div>
+                  </div>
+                </div>
+              </div>
+  
+            <div class="col-sm-8">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="ativo_nome">{{ formulario.nome.label }}</label>
+                    {{ formulario.nome(class="form-control") }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            {{ formulario.segmento.label }}<br>
+            {{ formulario.segmento(class="form-control") }}
+          </div>
+          
+          <br/>
+          <div>
+            {{ formulario.submit(class="form-control bg-info") }}
+          </div>
+          </form>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery/jquery.min.js') }}"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <!-- Bootstrap 4 -->
+  <script src="{{ url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <!-- ChartJS -->
+  <script src="{{ url_for('static', filename='assets/plugins/chart.js/Chart.min.js') }}"></script>
+  <!-- AdminLTE App -->
+  <script src="{{ url_for('static', filename='assets/js/adminlte.js') }}"></script>
+  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+  <script src="{{ url_for('static', filename='assets/js/pages/dashboard.js') }}"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="{{ url_for('static', filename='assets/js/demo.js') }}"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const consultarBtn = document.getElementById('consultar-btn');
+        const tickerInput = document.getElementById('ativo_ticker');
+        const nomeInput = document.getElementById('nome');
+        const segmentoInput = document.getElementById('segmento');
+
+        console.log('Script de consulta carregado.');
+
+        if (consultarBtn) {
+            consultarBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                let ticker = tickerInput.value.trim().toUpperCase();
+                
+                tickerInput.value = ticker;
+                
+                console.log('Botão de consulta clicado. Ticker:', ticker);
+
+                if (ticker) {
+                    
+                    
+                    const url = `{{ url_for('ativos.consultar_ticker', ticker='') }}${ticker}`;
+                    
+                    console.log('URL da consulta:', url);
+                    
+                    fetch(url)
+                        .then(response => {
+                            console.log('Status da resposta:', response.status);
+                            if (!response.ok) {
+                                throw new Error(`Erro HTTP: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Dados recebidos:', data);
+                            
+                            if (data.nome && data.nome !== 'Não Encontrado' && data.nome !== 'Erro na Busca') {
+                                nomeInput.value = data.nome;
+                                segmentoInput.value = data.segmento || '';
+                                console.log('Campos preenchidos com sucesso!');
+                            } else {
+                                console.log('Ticker não encontrado:', data);
+                                alert('Ticker "' + ticker + '" não encontrado. Verifique o código.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro na consulta:', error);
+                            alert('Erro ao consultar o ticker. Tente novamente.');
+                        });
+                } else {
+                    alert('Por favor, digite um ticker.');
+                }
+            });
+        }
+    });
+  </script>
+
+{% endblock javascripts %}
