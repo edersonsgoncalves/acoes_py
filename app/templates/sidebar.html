@@ -74,15 +74,15 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url_for('operacoes.adicionar_operacao') }}" class="nav-link {% if 'dynamic_dt' in segment %} active {% endif %}">
+                <a href="{{ url_for('ativos.adicionar_ativo') }}" class="nav-link {% if 'dynamic_dt' in segment %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Adicionar</p>
+                  <p>Adicionar Ativos</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url_for('operacoes.exibir_operacoes') }}" class="nav-link {% if 'charts' in segment %} active {% endif %}">
+                <a href="{{ url_for('ativos.exibir_ativos') }}" class="nav-link {% if 'charts' in segment %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Listar Operações</p>
+                  <p>Listar Ativos</p>
                 </a>
               </li>
             </ul>
