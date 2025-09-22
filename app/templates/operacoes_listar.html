@@ -61,7 +61,38 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-      <a href="{{ url_for('operacoes.adicionar_operacao') }}">Adicionar Nova Operação</a>
+        <a href="{{ url_for('operacoes.adicionar_operacao') }}">Adicionar Nova Operação</a>
+        {% for operacao in operacoes %}
+        {% endfor %}
+
+        <form method="GET" action="{{ url_for('operacoes.exibir_operacoes') }}">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="ticker">Ticker</label>
+            <input type="text" name="ticker" id="ticker" class="form-control" value="{{ filtro_ticker }}">
+        </div>
+        <div class="col-md-2">
+            <label for="data_inicio">Data Início</label>
+            <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ filtro_data_inicio }}">
+        </div>
+        <div class="col-md-2">
+            <label for="data_fim">Data Fim</label>
+            <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ filtro_data_fim }}">
+        </div>
+        <div class="col-md-3">
+            <label for="carteira_id">Carteira</label>
+            <select name="carteira_id" id="carteira_id" class="form-control">
+                <option value="">Todas</option>
+                {% for carteira in carteiras %}
+                    <option value="{{ carteira.id }}" {% if carteira.id|string == filtro_carteira_id %}selected{% endif %}>{{ carteira.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary btn-block">Filtrar</button>
+        </div>
+    </div>
+</form>
       <hr>
       <table border="1" style="width:100%">
           <thead>
@@ -78,6 +109,34 @@
               </tr>
           </thead>
           <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               {% for operacao in operacoes %}
               <tr>
                 <td>{{ operacao.data.strftime('%d/%m/%Y') }}</td>
@@ -104,6 +163,29 @@
               {% endfor %}
           </tbody>
     </table>
+              <hr>
+
+      <nav aria-label="Navegação da Tabela">
+          <ul class="pagination justify-content-center">
+              <li class="page-item {% if not paginacao.has_prev %}disabled{% endif %}">
+                  <a class="page-link" href="{{ url_for('operacoes.exibir_operacoes', page=paginacao.prev_num) }}" aria-label="Anterior">
+                      <span aria-hidden="true">&laquo;</span>
+                  </a>
+              </li>
+              
+              {% for page_num in paginacao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                  <li class="page-item {% if page_num == paginacao.page %}active{% endif %}">
+                      <a class="page-link" href="{{ url_for('operacoes.exibir_operacoes', page=page_num) }}">{{ page_num }}</a>
+                  </li>
+              {% endfor %}
+  
+              <li class="page-item {% if not paginacao.has_next %}disabled{% endif %}">
+                  <a class="page-link" href="{{ url_for('operacoes.exibir_operacoes', page=paginacao.next_num) }}" aria-label="Próxima">
+                      <span aria-hidden="true">&raquo;</span>
+                  </a>
+              </li>
+          </ul>
+      </nav>
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

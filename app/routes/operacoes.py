@@ -8,11 +8,66 @@ bp_operacoes = Blueprint("operacoes", __name__, url_prefix="/operacao")
 
 
 @bp_operacoes.route("/", methods=["GET", "POST"])
-def exibir_operacoes():
-    operacoes = (
-        db.session.execute(db.select(Operacao).order_by(Operacao.data)).scalars().all()
+@bp_operacoes.route("/<int:page>")
+def exibir_operacoes(page=1):
+    PER_PAGE = 10
+
+    # === AQUI ESTÁ A LÓGICA DE FILTRAGEM ===
+    # Lê os parâmetros de filtro da URL
+    filtro_ticker = request.args.get("ticker", "")
+    filtro_data_inicio = request.args.get("data_inicio", "")
+    filtro_data_fim = request.args.get("data_fim", "")
+    filtro_carteira_id = request.args.get("carteira_id", "")
+
+    # Constrói a consulta base
+    query = db.select(Operacao)
+
+    # Adiciona os filtros à consulta se os valores existirem
+    if filtro_ticker:
+        query = query.join(Operacao.ativo).filter(
+            Ativo.ticker.ilike(f"%{filtro_ticker}%")
+        )
+
+    if filtro_data_inicio:
+        # Filtra por data de início
+        query = query.filter(Operacao.data >= filtro_data_inicio)
+
+    if filtro_data_fim:
+        # Filtra por data de fim
+        query = query.filter(Operacao.data <= filtro_data_fim)
+
+    if filtro_carteira_id:
+        # Filtra por carteira
+        query = query.filter(Operacao.carteira_id == filtro_carteira_id)
+
+    # Adiciona a ordenação e a paginação à consulta final
+    query = query.order_by(Operacao.data.desc())
+    operacoes_paginadas = db.paginate(query, page=page, per_page=PER_PAGE)
+
+    # Obtém todas as carteiras para popular o filtro do SelectField
+    carteiras = db.session.execute(db.select(Carteira)).scalars().all()
+
+    return render_template(
+        "operacoes_listar.html",
+        operacoes=operacoes_paginadas.items,
+        paginacao=operacoes_paginadas,
+        # Passa os valores dos filtros de volta para o template
+        filtro_ticker=filtro_ticker,
+        filtro_data_inicio=filtro_data_inicio,
+        filtro_data_fim=filtro_data_fim,
+        filtro_carteira_id=filtro_carteira_id,
+        carteiras=carteiras,  # Passa a lista de carteiras para o select
     )
-    return render_template("operacoes_listar.html", operacoes=operacoes)
+
+    # operacoes_paginadas = db.paginate(
+    #     db.select(Operacao).order_by(Operacao.data.desc()), page=page, per_page=PER_PAGE
+    # )
+
+    # return render_template(
+    #     "operacoes_listar.html",
+    #     operacoes=operacoes_paginadas.items,
+    #     paginacao=operacoes_paginadas,
+    # )
 
 
 @bp_operacoes.route("/adicionar", methods=["GET", "POST"])
