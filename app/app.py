@@ -6,7 +6,7 @@ from routes.operacoes import bp_operacoes
 from routes.ativos import bp_ativos
 from routes.main import bp_inicio
 
-# from flask_migrate import Migrate
+from flask_migrate import Migrate
 
 
 load_dotenv()
@@ -30,7 +30,7 @@ def create_app():
     app.register_blueprint(bp_ativos)
     app.register_blueprint(bp_inicio)
 
-    # migrate = Migrate(app, db)  # type:ignore
+    Migrate(app, db)
     db.init_app(app)
 
     with app.app_context():
