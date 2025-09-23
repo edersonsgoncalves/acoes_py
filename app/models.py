@@ -34,12 +34,30 @@ class Ativo(db.Model):
     ticker = db.Column(db.String(7), unique=True, nullable=False)
     nome = db.Column(db.String(50), nullable=False)
     segmento = db.Column(db.String(100))
+    tipo_id = db.Column(db.Integer, db.ForeignKey("tipos_ativos.id"), nullable=False)
 
     posicoes_ativos = db.relationship("PosicaoAtivo", back_populates="ativo")
     operacoes = db.relationship("Operacao", back_populates="ativo")
+    # AQUI ESTÁ A CORREÇÃO: ADICIONE ESTA LINHA!
+    # "tipo_ativo" é o nome da relação que o outro modelo espera
+    tipo_ativo = db.relationship("TipoAtivo", back_populates="ativos")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def __repr__(self):
+        return f"<Ativo: {self.ticker}>"
+
+
+class TipoAtivo(db.Model):
+    __tablename__ = "tipos_ativos"
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(50), nullable=False, unique=True)
+
+    ativos = db.relationship("Ativo", back_populates="tipo_ativo", lazy=True)
+
+    def __repr__(self):
+        return f"<TipoAtivo: {self.nome}>"
 
 
 class TipoOperacao(db.Model):

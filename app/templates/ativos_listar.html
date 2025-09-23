@@ -72,15 +72,17 @@
                   <th>Ticker</th>
                   <th>Nome do Ativo</th>
                   <th>Segmento</th>
+                  <th>Tipo de Ativo</th>
                   <th></th>
               </tr>
           </thead>
           <tbody>
               {% for ativo in ativos %}
               <tr>
-                <td>({{ ativo.id }}){{ ativo.ticker }}</td>
+                <td>{{ ativo.ticker }}</td>
                 <td>{{ ativo.nome }}</td>
                 <td>{{ ativo.segmento }}</td>
+                <td>{{ ativo.tipo_ativo.nome }}</td>
                 <td align="center">
                   <a class="rounded btn btn-sm bg-success" href="">Detalhes</a>
                   <a class="rounded btn btn-sm bg-info" href="{{ url_for('ativos.editar_ativo', ativo_id=ativo.id) }}">Editar</a>
