@@ -9,7 +9,7 @@ from flask import (
     current_app,
     request,
 )
-from models import db, Ativo
+from models import db, Ativo, TipoAtivo
 from forms import FormularioAtivo
 from sqlalchemy.exc import IntegrityError
 
@@ -35,12 +35,16 @@ def exibir_ativos(page=1):
 def adicionar_ativo():
     formulario = FormularioAtivo()
 
+    tipos_ativo = db.session.execute(db.select(TipoAtivo)).scalars().all()
+    formulario.tipo_ativo.choices = [(tipo.id, tipo.nome) for tipo in tipos_ativo]
+
     if formulario.validate_on_submit():
         try:
             novo_ativo = Ativo(
                 ticker=formulario.ativo_ticker.data,
                 nome=formulario.nome.data,
                 segmento=formulario.segmento.data,
+                tipo_id=formulario.tipo_ativo.data,
             )
             db.session.add(novo_ativo)
             db.session.commit()
@@ -139,23 +143,22 @@ def editar_ativo(ativo_id):
         flash("Ativo não encontrado.", "danger")
         return redirect(url_for("ativos.exibir_ativos"))
 
-    # Cria o formulário já com as choices
-    formulario_ativo = FormularioAtivo()
-    # ativo_ticker
-    # nome
-    # segmento
+    tipos = db.session.execute(db.select(TipoAtivo)).scalars().all()
 
-    # Agora sim, carrega os dados do objeto do banco
+    formulario_ativo = FormularioAtivo()
+    formulario_ativo.tipo_ativo.choices = [(t.id, t.nome) for t in tipos]
+
     if request.method == "GET":
         formulario_ativo.ativo_ticker.data = ativo_para_editar.ticker
         formulario_ativo.nome.data = ativo_para_editar.nome
         formulario_ativo.segmento.data = ativo_para_editar.segmento
+        formulario_ativo.tipo_ativo.data = str(ativo_para_editar.tipo_id)
 
     if formulario_ativo.validate_on_submit():
-        # Lógica para atualizar a operação
         ativo_para_editar.ticker = formulario_ativo.ativo_ticker.data
         ativo_para_editar.nome = formulario_ativo.nome.data
         ativo_para_editar.segmento = formulario_ativo.segmento.data
+        ativo_para_editar.tipo_id = formulario_ativo.tipo_ativo.data
 
         db.session.commit()
         flash("Operação atualizada com sucesso!", "success")

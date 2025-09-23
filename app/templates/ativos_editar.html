@@ -67,17 +67,28 @@
   
             <div class="col-sm-8">
               <div class="form-group">
-                <div class="form-group">
-                  <label for="ativo_nome">{{ formulario.nome.label }}</label>
-                    {{ formulario.nome(class="form-control") }}
-                </div>
+                <label for="ativo_nome">{{ formulario.nome.label }}</label>
+                  {{ formulario.nome(class="form-control") }}
               </div>
             </div>
           </div>
-          <div>
-            {{ formulario.segmento.label }}<br>
-            {{ formulario.segmento(class="form-control") }}
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="ativo_nome">{{ formulario.segmento.label }}</label>
+                {{ formulario.segmento(class="form-control") }}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="tipo_ativo_label">
+                  {{ formulario.tipo_ativo.label }}
+                </label>
+                {{ formulario.tipo_ativo(class="form-control") }}
+              </div>
+            </div>
           </div>
+          
           
           <br/>
           <div>
