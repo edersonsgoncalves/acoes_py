@@ -48,6 +48,7 @@ class FormularioAtivo(FlaskForm):
     ativo_ticker = StringField("Ticker do Ativo", validators=[DataRequired()])
     nome = StringField("Nome do Ativo", validators=[DataRequired()])
     segmento = StringField("Segmento do Ativo")
+    tipo_ativo = SelectField("Tipo de Ativo", validators=[DataRequired()])
 
     # Botão de envio do formulário
     submit = SubmitField("Registrar Ativo")
