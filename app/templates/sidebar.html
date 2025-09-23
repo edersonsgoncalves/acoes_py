@@ -38,31 +38,43 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
-            
+            <li class="nav-item">
+              <li class="nav-item">
+                <a href="{{ url_for('main.home') }}" class="nav-link">
+                  Início
+                </a>
+              </li>
+            </li>
 
-            <li class="nav-item {% if 'apps' in parent %} menu-open {% endif %}">
-            <a href="#" class="nav-link {% if 'apps' in parent %} active {% endif %}">
-              <i class="nav-icon fas fa-th-large"></i>
-              <p>
-                Operações
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url_for('operacoes.adicionar_operacao') }}" class="nav-link {% if 'dynamic_dt' in segment %} active {% endif %}">
+            <li class="nav-header">ATIVOS</li>
+            <li class="nav-item">
+              <a href="{{ url_for('ativos.adicionar_ativo') }}" class="nav-link {% if 'dynamic_dt' in segment %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Adicionar</p>
+                  <p>Adicionar Ativos</p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url_for('operacoes.exibir_operacoes') }}" class="nav-link {% if 'charts' in segment %} active {% endif %}">
+            </li>
+            <li class="nav-item">
+              <a href="{{ url_for('ativos.exibir_ativos') }}" class="nav-link {% if 'charts' in segment %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Listar Operações</p>
+                  <p>Listar Ativos</p>
                 </a>
-              </li>
-            </ul>
-          </li>
+            </li>
+            <li class="nav-header">OPERAÇÕES</li>
+            <li class="nav-item">
+              <a href="{{ url_for('operacoes.adicionar_operacao') }}" class="nav-link {% if 'dynamic_dt' in segment %} active {% endif %}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Adicionar</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url_for('operacoes.exibir_operacoes') }}" class="nav-link {% if 'charts' in segment %} active {% endif %}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Listar Operações</p>
+              </a>
+            </li>
+            
+            <li class="nav-header">DIVERSOS</li>
+
             <li class="nav-item {% if 'apps' in parent %} menu-open {% endif %}">
             <a href="#" class="nav-link {% if 'apps' in parent %} active {% endif %}">
               <i class="nav-icon fas fa-copy"></i>
@@ -74,16 +86,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url_for('ativos.adicionar_ativo') }}" class="nav-link {% if 'dynamic_dt' in segment %} active {% endif %}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Adicionar Ativos</p>
-                </a>
+                
               </li>
               <li class="nav-item">
-                <a href="{{ url_for('ativos.exibir_ativos') }}" class="nav-link {% if 'charts' in segment %} active {% endif %}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Listar Ativos</p>
-                </a>
+                
               </li>
             </ul>
           </li>
