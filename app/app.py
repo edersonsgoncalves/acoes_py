@@ -19,6 +19,8 @@ class Config:
     POLYGON_API_KEY = os.getenv("POLYGON_API_KEY")
     ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
     SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
+    BRAPI_API_KEY = os.getenv("BRAPI_API_KEY")
+    BRAPI_API_BASE_URL = "https://brapi.dev/api/quote/"
 
 
 def create_app():
