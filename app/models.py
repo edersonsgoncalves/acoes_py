@@ -17,6 +17,9 @@ class PosicaoAtivo(db.Model):
     carteira = db.relationship("Carteira", back_populates="posicoes_ativos")
     ativo = db.relationship("Ativo", back_populates="posicoes_ativos")
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
 
 class Carteira(db.Model):
     __tablename__ = "carteiras"
@@ -109,28 +112,6 @@ class Operacao(db.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # def __init__(
-        #     self,
-        #     data: date,
-        #     tipo,
-        #     ativo,
-        #     carteira,
-        #     quantidade,
-        #     status,
-        #     preco_unitario: Optional[Decimal] = Decimal(0),
-        #     custos: Optional[Decimal] = Decimal(0),
-        # ):
-        #     self.data = data
-        #     self.tipo = tipo
-        #     self.ativo = ativo
-        #     self.carteira = carteira
-        #     self.quantidade = quantidade
-        #     self.preco_unitario = preco_unitario
-        #     self.custos = custos
-
-        #     # Atribui o objeto status, SQLAlchemy irá extrair o ID
-        #     self.status_operacao = status
 
         # Garante que o valor total seja calculado corretamente
         self.calcular_valor_total()
