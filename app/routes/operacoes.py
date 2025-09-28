@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, flash, abort, request
 from models import db, Operacao, TipoOperacao, Carteira, Ativo, StatusOperacao
+from services.posicao_service import recalcular_posicao, recalcular_posicao_historico
 from forms import OperacaoForm
 from datetime import date
 
@@ -134,6 +135,8 @@ def adicionar_operacao():
             db.session.add(nova_operacao)
             db.session.commit()
 
+            recalcular_posicao(nova_operacao)
+
             mensagem = f'Operação registrada com sucesso! <a href="{url_for('operacoes.exibir_operacoes')}">\
                 Voltar para listagem de ativos</a>'
             flash(mensagem, "success")
@@ -166,6 +169,9 @@ def editar_operacao(operacao_id):
     if not operacao_para_editar:
         flash("Operação não encontrada.", "danger")
         return redirect(url_for("operacoes.listar_operacoes"))
+
+    ativo_id_original = operacao_para_editar.ativo_id
+    carteira_id_original = operacao_para_editar.carteira_id
 
     # Primeiro, popula os SelectFields com os dados do banco
     tipos_operacao = db.session.execute(db.select(TipoOperacao)).scalars().all()
@@ -202,7 +208,23 @@ def editar_operacao(operacao_id):
         operacao_para_editar.calcular_valor_total()
 
         db.session.commit()
-        flash("Operação atualizada com sucesso!", "success")
+
+        # 1. Se os IDs mudaram (ativo ou carteira), recalcule a posição que foi 'abandonada'
+        if (
+            ativo_id_original != operacao_para_editar.ativo_id
+            or carteira_id_original != operacao_para_editar.carteira_id
+        ):
+
+            # Recalcula a posição original para remover o impacto da operação
+            recalcular_posicao_historico(ativo_id_original, carteira_id_original)
+
+        # 2. Recalcula a posição atual (ou a nova, se o ativo/carteira mudou)
+        recalcular_posicao_historico(
+            operacao_para_editar.ativo_id, operacao_para_editar.carteira_id
+        )
+
+        mensagem = f"Operação atualizada com sucesso! <a href='{url_for("operacoes.exibir_operacoes")}'>Voltar para listagem de ativos</a>"
+        flash(mensagem, "success")
         return redirect(url_for("operacoes.editar_operacao", operacao_id=operacao_id))
 
     return render_template(
