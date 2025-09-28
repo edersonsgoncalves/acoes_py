@@ -223,7 +223,8 @@ def editar_operacao(operacao_id):
             operacao_para_editar.ativo_id, operacao_para_editar.carteira_id
         )
 
-        mensagem = f"Operação atualizada com sucesso! <a href='{url_for("operacoes.exibir_operacoes")}'>Voltar para listagem de ativos</a>"
+        mensagem = f"Operação atualizada com sucesso! <a href='{url_for("operacoes.exibir_operacoes")}'>\
+            Voltar para listagem de ativos</a>"
         flash(mensagem, "success")
         return redirect(url_for("operacoes.editar_operacao", operacao_id=operacao_id))
 
