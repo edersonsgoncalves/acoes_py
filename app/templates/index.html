@@ -11,20 +11,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/jqvmap/jqvmap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/adminlte.min.css') }}">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.css') }}">
-  <!-- summernote -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.css') }}">
 
 {% endblock stylesheets %}
 
@@ -59,14 +47,14 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>R$ {{ "%.2f"|format(total_investido) }}</h3>
 
-                <p>New Orders</p>
+                <p>Total Investido</p>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-cash"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Mais detalhes <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -74,9 +62,9 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>R$ {{ "%.2f"|format(total_valor_mercado) }}</h3>
 
-                <p>Bounce Rate</p>
+                <p>Valor Atual Carteira</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -89,9 +77,9 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3>{{"%.2f"|format(((total_valor_mercado-total_investido)/total_investido)*100)}}</h3>
 
-                <p>User Registrations</p>
+                <p>Valorização</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -117,11 +105,13 @@
           <!-- ./col -->
         </div>
         <!-- /.row -->
+
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
           <section class="col-lg-7 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
+             
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">
@@ -653,22 +643,6 @@
   <script src="{{ url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <!-- ChartJS -->
   <script src="{{ url_for('static', filename='assets/plugins/chart.js/Chart.min.js') }}"></script>
-  <!-- Sparkline -->
-  <script src="{{ url_for('static', filename='assets/plugins/sparklines/sparkline.js') }}"></script>
-  <!-- JQVMap -->
-  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
-  <!-- jQuery Knob Chart -->
-  <script src="{{ url_for('static', filename='assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
-  <!-- daterangepicker -->
-  <script src="{{ url_for('static', filename='assets/plugins/moment/moment.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-  <!-- Tempusdominus Bootstrap 4 -->
-  <script src="{{ url_for('static', filename='assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-  <!-- Summernote -->
-  <script src="{{ url_for('static', filename='assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
-  <!-- overlayScrollbars -->
-  <script src="{{ url_for('static', filename='assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
   <!-- AdminLTE App -->
   <script src="{{ url_for('static', filename='assets/js/adminlte.js') }}"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
